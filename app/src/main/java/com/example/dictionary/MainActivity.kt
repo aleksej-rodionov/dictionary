@@ -1,28 +1,70 @@
 package com.example.dictionary
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.dictionary.feature_dictionary.presentation.WordInfoItem
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.dictionary.databinding.ActivityMainBinding
+import com.example.dictionary.feature_dictionary.presentation.WordInfoAdapter
 import com.example.dictionary.feature_dictionary.presentation.WordInfoViewModel
-import com.example.dictionary.ui.DictionaryTheme
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+//    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+    private val viewModel: WordInfoViewModel by viewModels()
+    private val adapter by lazy {
+        WordInfoAdapter()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        binding.apply {
+            etSearch.setText(viewModel.searchQuery.value)
+
+            rv.adapter = adapter
+            rv.addItemDecoration(DividerItemDecoration(
+                this@MainActivity,
+                DividerItemDecoration.VERTICAL
+            ))
+
+            etSearch.addTextChangedListener {
+                viewModel.onSearch(it.toString())
+            }
+
+            lifecycleScope.launchWhenStarted {
+
+                viewModel.state.collectLatest { state ->
+                    val list = state.wordInfoItems
+                    adapter.submitList(list)
+
+                    progressBar.isVisible = state.isLoading
+                }
+
+                viewModel.eventFlow.collectLatest { event ->
+                    when (event) {
+                        is WordInfoViewModel.UIEvent.ShowSnackbar -> {
+                            Snackbar.make(view, event.msg, Snackbar.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            }
+        }
+
+        /*setContent {
             DictionaryTheme {
                 val viewModel: WordInfoViewModel = hiltViewModel()
                 val state = viewModel.state.value
@@ -79,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
+        }*/
     }
 }
 

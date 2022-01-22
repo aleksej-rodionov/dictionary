@@ -9,10 +9,7 @@ import com.example.dictionary.feature_dictionary.domain.use_cases.GetWordInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,11 +18,21 @@ class WordInfoViewModel @Inject constructor(
     private val getWordInfo: GetWordInfo
 ) : ViewModel() {
 
-    private val _searchQuery = mutableStateOf<String>("")
-    val searchQuery: State<String> = _searchQuery
+    //=====================FOR COMPOSE==========================
+//    private val _searchQuery = mutableStateOf<String>("")
+//    val searchQuery: State<String> = _searchQuery
 
-    private val _state = mutableStateOf(WordInfoState())
-    val state: State<WordInfoState> = _state
+//    private val _state = mutableStateOf(WordInfoState())
+//    val state: State<WordInfoState> = _state
+    //=========================================================
+
+    //========================FOR XML==========================
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
+    private val _state = MutableStateFlow(WordInfoState())
+    val state = _state.asStateFlow()
+    //=========================================================
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()

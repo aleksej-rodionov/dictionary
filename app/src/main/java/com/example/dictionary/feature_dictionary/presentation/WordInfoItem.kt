@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dictionary.feature_dictionary.domain.models.WordInfo
 
+/*
 @Composable
 fun WordInfoItem(
     wordInfo: WordInfo,
@@ -41,4 +42,4 @@ fun WordInfoItem(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
-}
+}*/
