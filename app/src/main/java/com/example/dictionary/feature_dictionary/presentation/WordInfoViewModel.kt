@@ -41,19 +41,19 @@ class WordInfoViewModel @Inject constructor(
                 when(result) {
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            wordInfoItams = result.data ?: emptyList(),
+                            wordInfoItems = result.data ?: emptyList(),
                             isLoading = true
                         )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            wordInfoItams = result.data ?: emptyList(),
+                            wordInfoItems = result.data ?: emptyList(),
                             isLoading = false
                         )
                     }
                     is Resource.Error -> {
                         _state.value = state.value.copy(
-                            wordInfoItams = result.data ?: emptyList(),
+                            wordInfoItems = result.data ?: emptyList(),
                             isLoading = false
                         )
                         _eventFlow.emit(UIEvent.ShowSnackbar(result.message ?: "Unknown error"))
