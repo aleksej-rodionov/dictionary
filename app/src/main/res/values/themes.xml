@@ -22,4 +22,12 @@
     <style name="Theme.Dictionary.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Dictionary.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Regular18Black" parent="@android:style/TextAppearance.Widget.TextView">
+        <item name="android:fontFamily">@font/sf_ui_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColorHint">@color/colorBeta</item>
+    </style>
 </resources>
